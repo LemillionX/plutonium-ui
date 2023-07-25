@@ -14,6 +14,9 @@ class BaseUI(QWidget):
         # Content that will be written to the file
         self.content = []
 
+        # Dictionnary of all the maps
+        self.maps_dict = {}
+
         # Layout to display
         self.layout = QHBoxLayout()
 
@@ -40,17 +43,24 @@ class BaseUI(QWidget):
         self.save_button.clicked.connect(self.save_settings)
         self.settings.addWidget(self.save_button)
 
+        ## Launch Button
+        self.launch_button = QPushButton("Launch a game")
+        self.settings.addWidget(self.launch_button)
+
     def load_file(self):
         print("Loading settings...")
-        with open(self.file, "r") as file:
+        with open(self.file, "r", encoding='utf8') as file:
             self.content = file.readlines()
-        print(len(self.content))
-        print(self.content)
+        print(f"{len(self.content)} lines")
 
     def save_settings(self):
         print("Saving settings...")
-        with open(self.file, "w") as file:
+        with open(self.file, "w", encoding='utf8') as file:
             file.writelines(self.content)
 
     def setImage(self):
         self.image.setStyleSheet(f"background-image: url({self.url_image})")
+
+    def readAttributeFromText(self, line, idx):
+        return self.content[line].split(" ")[idx].split('"')[1]
+

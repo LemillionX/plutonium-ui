@@ -8,7 +8,7 @@ from zombie_t5 import *
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.width = 1280
+        self.width = 960
         self.height = 720
         self.resize(self.width, self.height)
 
