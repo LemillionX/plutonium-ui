@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import base
+from zombie_t5 import *
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -16,11 +17,12 @@ class MainWindow(QMainWindow):
         l = QHBoxLayout()
         w.setLayout(l)
 
-        self.base = base.BaseUI(self.width, self.height)
+        # self.base = base.BaseUI(self.width, self.height)
+        self.zombie_t5 = ZombieT5(self.width, self.height)
 
         # Sublayouts corresponding to the different fames
         self.stacked_layout = QStackedLayout()
-        self.stacked_layout.addWidget(self.base)
+        self.stacked_layout.addWidget(self.zombie_t5)
         l.addLayout(self.stacked_layout)
 
         # Set the widget
