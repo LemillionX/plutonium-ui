@@ -57,6 +57,7 @@ class BaseUI(QWidget):
         print("Saving settings...")
         with open(self.file, "w", encoding='utf8') as file:
             file.writelines(self.content)
+        print("Settings saved !")
 
     def setImage(self):
         self.image.setStyleSheet(f"background-image: url({self.url_image})")
