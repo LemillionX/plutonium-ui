@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -8,8 +7,10 @@ class ZombieT5(BaseUI):
     def __init__(self, width, height):
         super().__init__(width, height)
 
-        self.file = "../files/t5/dedicated_sp.cfg"
+        self.file = r"../files/t5/dedicated_sp.cfg"
         self.load_file()
+
+        self.start = os.path.join(os.path.dirname(__file__), "../files/t5/test.bat")
 
         self.g_inactivity = int(self.readAttributeFromText(line=4, idx=1))
         self.g_inactivity_input = QLineEdit(str(self.g_inactivity))
@@ -20,6 +21,7 @@ class ZombieT5(BaseUI):
         self.party_minplayers = int(self.readAttributeFromText(line=5, idx=1))
         self.party_minplayers_input = QComboBox()
         self.party_minplayers_input.addItems([str(i) for i in range(1,5)])
+        self.party_minplayers_input.setCurrentIndex(self.party_minplayers-1)
         self.party_minplayers_input.currentTextChanged.connect(self.set_party_minplayers)
         self.settings.addRow("Minimum number of players", self.party_minplayers_input)
 
@@ -42,7 +44,7 @@ class ZombieT5(BaseUI):
 
         self.voice = int(self.readAttributeFromText(line=9, idx=1))
         self.voice_input = QCheckBox()
-        self.voice_input.setChecked(True)
+        self.voice_input.setChecked(self.voice)
         self.voice_input.stateChanged.connect(self.set_voice)
         self.settings.addRow("Voice Chat ", self.voice_input)
 
@@ -56,7 +58,7 @@ class ZombieT5(BaseUI):
         self.voice_quality_input.valueChanged.connect(self.set_voice_quality)
         self.settings.addRow("Voice Quality ", self.voice_quality_input)
 
-        self.map = "zombie_theater"
+        self.map = self.readAttributeFromText(line=43, idx=3, subidx=0)
         self.map_input = QComboBox()
         self.maps_dict["Kino Der Toten"] = "zombie_theater"
         self.maps_dict["Five"] = "zombie_pentagon"
@@ -71,6 +73,7 @@ class ZombieT5(BaseUI):
         self.maps_dict["Der Riese"] = "zombie_cod5_factory"
         self.map_input.addItems(self.maps_dict.keys())
         self.map_input.currentTextChanged.connect(self.set_map)
+        self.map_input.setCurrentText([k for k in self.maps_dict.keys() if self.maps_dict[k] == self.map][0])
         self.settings.addRow("Map selected", self.map_input)
 
     def set_g_inactivity(self, g_inactivity):
@@ -119,4 +122,18 @@ class ZombieT5(BaseUI):
     def set_map(self, map):
         self.map = self.maps_dict[map]
         self.content[43] = f'set sv_maprotation "map {self.map}"\n'
+
+    def init_images(self):
+        self.images_dict["Kino Der Toten"] = "../medias/t5/kino-der-toten.jpg"
+        self.images_dict["Five"] = "../medias/t/five.png"
+        self.images_dict["Dead Ops Arcade"] = "zombietron"
+        self.images_dict["Ascension"] = "zombie_cosmodrome"
+        self.images_dict["Call Of The Dead"] = "zombie_coast"
+        self.images_dict["Shangri-La"] = "zombie_temple"
+        self.images_dict["Moon"] = "zombie_moon"
+        self.images_dict["Nacht Der Untoten"] = "zombie_cod5_prototype"
+        self.images_dict["Verrückt"] = "zombie_cod5_asylum"
+        self.images_dict["Shi No Numa"] = "zombie_cod5_sumpf"
+        self.images_dict["Der Riese"] = "zombie_cod5_factory"
+
 
