@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import os
 from subprocess import Popen
-
+import sys
 
 class BaseUI(QWidget):
     def __init__(self, width, height):
@@ -78,10 +78,13 @@ class BaseUI(QWidget):
 
     def load_file(self, init=False):
         print("Loading settings...")
-        with open(self.file, "r", encoding='utf8') as file:
-            self.content = file.readlines()
-        if not init:
-            self.update()
+        try:
+            with open(self.file, "r", encoding='utf8') as file:
+                self.content = file.readlines()
+            if not init:
+                self.update()
+        except OSError as e:
+            print(f"Unable to open '{self.file}': {e}", file=sys.stderr)
         print(f"{len(self.content)} lines loaded")
 
     def save_settings(self):
