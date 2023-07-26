@@ -29,7 +29,7 @@ class BaseUI(QWidget):
         self.image = QLabel(self)
         self.image.resize(width//2, height)
         self.url_image = "../medias/test.png"
-        self.setImage()
+        self.set_image()
         self.layout.addWidget(self.image)
 
         # Settings panel
@@ -76,10 +76,12 @@ class BaseUI(QWidget):
         self.launch_button.clicked.connect(self.launch_server)
         self.settings.addWidget(self.launch_button)
 
-    def load_file(self):
+    def load_file(self, init=False):
         print("Loading settings...")
         with open(self.file, "r", encoding='utf8') as file:
             self.content = file.readlines()
+        if not init:
+            self.update()
         print(f"{len(self.content)} lines loaded")
 
     def save_settings(self):
@@ -88,7 +90,7 @@ class BaseUI(QWidget):
             file.writelines(self.content)
         print("Settings saved !")
 
-    def setImage(self):
+    def set_image(self):
         self.image.setStyleSheet(f"background-image: url({self.url_image})")
 
     def readAttributeFromText(self, line, idx, subidx=1):
@@ -103,8 +105,12 @@ class BaseUI(QWidget):
         fileName = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
         self.file_display.setText(fileName)
         self.file = fileName
+        self.load_file()
 
     def set_launch(self):
         fileName = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
         self.start_display.setText(fileName)
         self.start = fileName
+
+    def update(self):
+        pass
